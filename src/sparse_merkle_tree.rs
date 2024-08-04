@@ -1,6 +1,6 @@
 use sha2::{Digest, Sha256};
 
-const TREE_DEPTH: usize = 128; 
+const TREE_DEPTH: usize = 128;
 
 struct SparseMerkleTree {
     root: Vec<u8>,
@@ -23,45 +23,45 @@ impl SparseMerkleTree {
     ===============================
     Path derivation example
     ===============================
-      
-     Key: [0b1101] (13 in decimal)                                                    
-     Tree depth: 4 bits                                                               
-                                                                                      
-     Initialize:                                                                      
-       path = 0b0000                                                                  
-       key  = 0b1101                                                                  
-                                                                                      
-     i = 3 (most significant bit):                                                    
-       Extract: key & (1 << 3) = 0b1101 & 0b1000 = 0b1000  // Isolate leftmost bit    
-       Shift:   0b1000 << 3    = 0b1000                    // Position the bit        
-       Update:  path |= 0b1000                             // Set the bit in path     
-       Result:  path = 0b1000                                                         
-                                                                                      
-     i = 2:                                                                           
-       Extract: key & (1 << 2) = 0b1101 & 0b0100 = 0b0100  // Isolate second bit       
-       Shift:   0b0100 << 2    = 0b0100                        
-       Update:  path |= 0b0100                             
-       Result:  path = 0b1100                                                      
-                                                                                  
-     i = 1:                                                                        
-       Extract: key & (1 << 1) = 0b1101 & 0b0010 = 0b0000  // Isolate third bit    
-       Shift:   0b0000 << 1    = 0b0000                        
-       Update:  path |= 0b0000                             // No change to path   
-       Result:  path = 0b1100 (unchanged)                                          
-                                                                                  
-     i = 0 (least significant bit):                                                
+
+     Key: [0b1101] (13 in decimal)
+     Tree depth: 4 bits
+
+     Initialize:
+       path = 0b0000
+       key  = 0b1101
+
+     i = 3 (most significant bit):
+       Extract: key & (1 << 3) = 0b1101 & 0b1000 = 0b1000  // Isolate leftmost bit
+       Shift:   0b1000 << 3    = 0b1000                    // Position the bit
+       Update:  path |= 0b1000                             // Set the bit in path
+       Result:  path = 0b1000
+
+     i = 2:
+       Extract: key & (1 << 2) = 0b1101 & 0b0100 = 0b0100  // Isolate second bit
+       Shift:   0b0100 << 2    = 0b0100
+       Update:  path |= 0b0100
+       Result:  path = 0b1100
+
+     i = 1:
+       Extract: key & (1 << 1) = 0b1101 & 0b0010 = 0b0000  // Isolate third bit
+       Shift:   0b0000 << 1    = 0b0000
+       Update:  path |= 0b0000                             // No change to path
+       Result:  path = 0b1100 (unchanged)
+
+     i = 0 (least significant bit):
        Extract: key & (1 << 0) = 0b1101 & 0b0001 = 0b0001  // Isolate rightmost bit
-       Shift:   0b0001 << 0    = 0b0001                        
-       Update:  path |= 0b0001                             
-       Result:  path = 0b1101                                                      
-                                                                                  
-     Final result: path = 0b1101                                                   
-                                                                                  
-     This path (1101) represents the following tree traversal:                     
-       1 - Go right at the first level (from the root)                             
-       1 - Go right at the second level                                            
-       0 - Go left at the third level                                              
-       1 - Go right at the fourth level (to the leaf)                              
+       Shift:   0b0001 << 0    = 0b0001
+       Update:  path |= 0b0001
+       Result:  path = 0b1101
+
+     Final result: path = 0b1101
+
+     This path (1101) represents the following tree traversal:
+       1 - Go right at the first level (from the root)
+       1 - Go right at the second level
+       0 - Go left at the third level
+       1 - Go right at the fourth level (to the leaf)
 
     */
 
@@ -84,8 +84,6 @@ impl SparseMerkleTree {
         }
         self.root = current_node;
     }
-
-    
 
     fn generate_proof(&self, key: &[u8; 16]) -> Vec<Vec<u8>> {
         let mut proof = Vec::new();

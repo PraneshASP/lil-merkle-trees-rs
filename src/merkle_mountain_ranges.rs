@@ -1,4 +1,4 @@
-use sha2::{Sha256, Digest};
+use sha2::{Digest, Sha256};
 
 #[derive(Debug, Clone)]
 struct MMR {
@@ -19,19 +19,19 @@ impl MMR {
     fn append(&mut self, data: &str) {
         let leaf_hash = hash(data);
         self.leaves.push(leaf_hash.clone());
-        
+
         let mut current_hash = leaf_hash;
         let mut height = 0;
         let mut new_peaks = Vec::new();
-        
+
         while height < self.peaks.len() && !self.peaks[height].is_empty() {
             current_hash = hash(&format!("{}{}", self.peaks[height], current_hash));
             self.peaks[height] = String::new();
             height += 1;
         }
-        
+
         new_peaks.push(current_hash);
-        
+
         for peak in new_peaks {
             if height == self.peaks.len() {
                 self.peaks.push(peak);
@@ -40,7 +40,7 @@ impl MMR {
             }
             height += 1;
         }
-        
+
         self.bag_peaks();
     }
 
@@ -80,7 +80,6 @@ impl MMR {
         }
         current_hash
     }
-   
 }
 
 fn hash(data: &str) -> String {
@@ -106,7 +105,11 @@ mod tests {
         mmr.append("H");
 
         let non_empty_peaks = mmr.peaks.iter().filter(|&p| !p.is_empty()).count();
-        assert_eq!(non_empty_peaks, 1, "Expected 1 non-empty peak, got {}", non_empty_peaks);
+        assert_eq!(
+            non_empty_peaks, 1,
+            "Expected 1 non-empty peak, got {}",
+            non_empty_peaks
+        );
 
         let root1 = mmr.root();
         mmr.append("I");
@@ -122,12 +125,14 @@ mod tests {
         }
 
         let non_empty_peaks = mmr.peaks.iter().filter(|&p| !p.is_empty()).count();
-        assert!(non_empty_peaks <= (10 as f64).log2().ceil() as usize, "Num non-empty peaks <= log2(n)");
+        assert!(
+            non_empty_peaks <= (10 as f64).log2().ceil() as usize,
+            "Num non-empty peaks <= log2(n)"
+        );
 
         let root1 = mmr.root();
         mmr.append("10");
         let root2 = mmr.root();
         assert_ne!(root1, root2, "Root should change after append");
     }
- 
 }

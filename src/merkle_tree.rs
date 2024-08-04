@@ -74,7 +74,7 @@ impl MerkleTree {
                 Self::hash_pair(sibling, &current_hash)
             }
         }
-        
+
         current_hash == root
     }
 }
