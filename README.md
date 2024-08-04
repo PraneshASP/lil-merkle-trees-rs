@@ -5,6 +5,6 @@ This repo consists of minimal implementation of merkle tree variations, implemen
 
 - [x] [Merkle tree](./src/merkle_tree.rs) - Can be used for Airdrops
 - [X] Sparse Merkle tree - Non-inclusion proofs, SMTChecker
+- [X] Merkle Mountain ranges 
 - [ ] Merkle practicia trie - Ethereum 
-- [ ] Merkle Mountain ranges 
 - [ ] Urkle Tree - Handshake protocol
